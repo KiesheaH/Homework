@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto Condensed";
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(190deg, #38ef7d, #11998e);
+  color: white;
+}
+
+h1 {
+  font-size: 4.5rem;
+  text-transform: uppercase;
+}
