@@ -21,13 +21,87 @@ Then, wrap it in an IIFE called TodoList that:
 
 Constraints: You should NOT be able to directly access or modify the todos array
 from outside the module.
+
+Tests:
+TodoList.addTodo("Learn closures");
+TodoList.addTodo("Build a project");
+TodoList.getTodos();
+console.log(TodoList.todos); // undefined (that's correct!)
+
+
+Solution:
+const TodoList = (() => {
+  // factory function to create todo list items
+  function createTodo() {
+    return {
+      name: "",
+      status: false,
+      changeStatus() {
+        this.status = !this.status;
+      },
+      getStatus() {
+        return this.status;
+      },
+    };
+  }
+
+  // object to store todo list items
+  const todos = [];
+
+  // method to create a new todo item
+  const addTodo = (task) => {
+    let todo = createTodo();
+    todo.name = task;
+
+    for (let i = 0; i < todos.length; i++) {
+      if (todos[i].name === task) {
+        return `Todo item exist. Enter a valid item. `;
+      }
+    }
+    todos.push(todo);
+  };
+
+  // method to get all todo items
+  const getTodos = () => {
+    return todos.slice();
+  };
+
+  // method that marks a specific task as complete
+  const markComplete = (task) => {
+    for (let i = 0; i < todos.length; i++) {
+      if (todos[i].name === task) {
+        todos[i].changeStatus();
+      }
+    }
+  };
+
+  return { addTodo, getTodos, markComplete };
+})();
+
+TodoList.addTodo("Learn closures");
+TodoList.addTodo("Build a project");
+TodoList.addTodo("Build a project");
+TodoList.markComplete("Build a project");
+console.log(TodoList.getTodos());
+console.log(TodoList.todos); // undefined (that's correct!)
 */
 
-function Todo(task) {
-  // use an array to store objects of tasks
-  // each object should contain a name and status property
-  // allow the status property to be able to be toggled
-  // create a function that would store the current state
-}
+/* 1.2: Bank Account Module
+Create a module (IIFE) that simulates a bank account. It should:
 
-Todo("mop");
+  a. Store a balance internally
+  b. Have a deposit(amount) function
+  c. Have a withdraw(amount) function
+  d. Have a getBalance() function
+  e. Prevent the balance from going negative
+
+Constraint: The balance should NOT be accessible from outside the module.
+
+Test it:
+BankAccount.deposit(100);
+BankAccount.withdraw(30);
+console.log(BankAccount.getBalance()); // 70
+
+BankAccount.withdraw(100); // Should be rejected
+console.log(BankAccount.getBalance()); // Still 70
+*/
