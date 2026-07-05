@@ -104,4 +104,116 @@ console.log(BankAccount.getBalance()); // 70
 
 BankAccount.withdraw(100); // Should be rejected
 console.log(BankAccount.getBalance()); // Still 70
+
+
+const BankAccount = (() => {
+  // stores the various transactions
+  const transactions = [];
+
+  // calculate account balance
+  const calculateBalance = () => {
+    return transactions.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  }
+
+  // deposit amount to the account
+  const deposit = (amount) => {
+    transactions.push(amount);
+  }
+
+  // deduct amount from account
+  const withdraw = (amount) => {
+    const currentBalance = calculateBalance();
+    if(amount > currentBalance) {
+      return `Rejected`
+    }
+    transactions.push(-amount);
+  }
+
+  // calculates and displays balance
+  const getBalance = () => {
+    return calculateBalance()
+  }
+  return { deposit, withdraw, getBalance }
+})();
+
+
+
+BankAccount.withdraw(50)
+BankAccount.withdraw(100);
+BankAccount.deposit(150)
+console.log(BankAccount.getBalance()); // 70
+
+BankAccount.withdraw(75); // Should be rejected
+console.log(BankAccount.getBalance()); // Still 70
 */
+
+/* 2. Separation of Concerns
+2.1: Calculator with Display
+  a. Build a simple calculator that separates:
+    i. Calculation logic (add, subtract, multiply, divide)
+    ii. Display logic (showing numbers on the page)
+
+Structure:
+const Calculator = (() => {
+  let total = 0;
+  
+  // All your math logic here
+  const add = (num) => { /* ... };
+  const subtract = (num) => { /* ... };
+  // etc.
+  
+  return { add, subtract, getTotal };
+})();
+
+const Display = (() => {
+  const display = document.querySelector("#display");
+  
+  // All your DOM logic here
+  const updateDisplay = (value) => { /* ...  };
+  const handleButtonClick = (e) => { /* ... *};
+  
+  return { updateDisplay, init };
+})();
+*/
+
+const Calculator = (() => {
+  // keeps track of calculation
+  let total = 0;
+
+  // mathematical operations
+  const add = (num) => {
+    return total += num;
+  }
+
+  const subtract = (num) => {
+    return total -= num;
+  }
+
+  const multiply = (num) => {
+    return total *= num;
+  }
+
+  const divide = (num) => {
+    return total /= num;
+  }
+
+  // gets the total value
+  const getTotal = () => {
+    return total;
+  }
+
+  return { add, subtract, multiply, divide, getTotal };
+})()
+
+
+const Display = (() => {
+  const display = document.querySelector('#display')
+})();
+
+
+
+console.log(Calculator.add(3));
+console.log(Calculator.add(3));
+console.log(Calculator.multiply(5));
+console.log(Calculator.divide(2));
+console.log(Calculator.divide(4));
