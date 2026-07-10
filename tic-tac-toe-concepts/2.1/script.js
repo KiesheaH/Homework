@@ -177,43 +177,109 @@ const Display = (() => {
 */
 
 const Calculator = (() => {
-  // keeps track of calculation
+  // keeps track of the total
   let total = 0;
 
   // mathematical operations
-  const add = (num) => {
-    return total += num;
-  }
+  const add = (num1, num2) => {
+    return (total = num1 + num2);
+  };
 
-  const subtract = (num) => {
-    return total -= num;
-  }
+  const subtract = (num1, num2) => {
+    return (total = num1 - num2);
+  };
 
-  const multiply = (num) => {
-    return total *= num;
-  }
+  const multiply = (num1, num2) => {
+    return (total = num1 * num2);
+  };
 
-  const divide = (num) => {
-    return total /= num;
-  }
+  const divide = (num1, num2) => {
+    return (total = num1 / num2);
+  };
 
   // gets the total value
   const getTotal = () => {
     return total;
-  }
+  };
 
   return { add, subtract, multiply, divide, getTotal };
-})()
-
-
-const Display = (() => {
-  const display = document.querySelector('#display')
 })();
 
+const Display = (() => {
+  const calculator = document.querySelector(".calculator");
+  const display = document.querySelector("#display");
+  const numbersBtns = document.querySelectorAll("[data-number]");
+  const operationBtns = document.querySelectorAll("[data-operation");
 
+  // global variables
+  const numOne = [];
+  const numTwo = [];
+  const displayScreen = [];
+  let operation;
+  let operandOne;
+  let operandTwo;
+  let calculation;
+  let answer;
 
-console.log(Calculator.add(3));
-console.log(Calculator.add(3));
-console.log(Calculator.multiply(5));
-console.log(Calculator.divide(2));
-console.log(Calculator.divide(4));
+  const updateDisplay = (value) => {
+    display.textContent = value;
+  };
+
+  calculator.addEventListener("click", (e) => {
+    // determine operandOne
+    if (e.target.dataset.number && displayScreen[1] === undefined) {
+      numOne.push(e.target.innerText);
+      operandOne = numOne.join("");
+      displayScreen[0] = operandOne;
+      updateDisplay(displayScreen.join(" "));
+    }
+
+    // determine the operator
+    if (e.target.dataset.operation && e.target.dataset.operation !== "equals") {
+      displayScreen[1] = e.target.innerText;
+      operation = e.target.dataset.operation;
+      updateDisplay(displayScreen.join(" "));
+    }
+
+    // determine operandTwo
+    if (
+      e.target.dataset.number &&
+      displayScreen[1] !== undefined &&
+      displayScreen[3] === undefined
+    ) {
+      numTwo.push(e.target.innerText);
+      operandTwo = numTwo.join("");
+      displayScreen[2] = operandTwo;
+      updateDisplay(displayScreen.join(" "));
+    }
+
+    // display the answer
+    if (e.target.dataset.operation === "equals" && displayScreen.length === 3) {
+      displayScreen[3] = e.target.innerText;
+      updateDisplay(displayScreen.join(" "));
+
+      const operator = operation;
+      switch (operator) {
+        case "add":
+          answer = Calculator.add(Number(operandOne), Number(operandTwo));
+          break;
+        case "subtract":
+          answer = Calculator.subtract(Number(operandOne), Number(operandTwo));
+          break;
+        case "multiply":
+          answer = Calculator.multiply(Number(operandOne), Number(operandTwo));
+          break;
+        case "divide":
+          answer = Calculator.divide(Number(operandOne), Number(operandTwo));
+          break;
+      }
+
+      displayScreen[4] = answer;
+      updateDisplay(displayScreen.join(" "));
+    }
+  });
+
+  return { updateDisplay };
+})();
+
+Display.updateDisplay();
